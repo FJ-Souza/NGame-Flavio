@@ -1,0 +1,25 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="row">
+    {% if games %}
+        {% for game in games %}
+            <div class="col-md-4">
+                <div class="card mb-4">
+                    <img class="card-img-top" src="{{ game.path.url }}" alt="{{ game.title }}">
+                    <div class="card-body">
+                        <h5 class="card-title">{{ game.title }}</h5>
+                        <p class="card-text">{{ game.description }}</p>
+                        <a href="{% url 'edit_gaming' game.id %}" class="btn btn-warning">Editar</a>
+                        <form method="post" action="{% url 'delete_gaming' game.id %}" style="display:inline;">
+                            {% csrf_token %}
+                            <button type="submit" class="btn btn-danger">Deletar</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        {% endfor %}
+    {% endif %}
+</div>
+<a href="{% url 'add_gaming' %}" class="btn btn-success">Adicionar Jogo</a>
+{% endblock %}

@@ -1,0 +1,11 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+
+  <div style="text-align: center;">
+    <h2 style="padding: 20px;">Jogos Disponíveis</h2>
+    <div class="row">
+      {% include 'partials/_card.html' %}
+    </div>
+  </div>
+{% endblock %}

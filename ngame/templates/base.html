@@ -1,0 +1,35 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NGame</title>
+    <link rel="stylesheet" href="{% static 'assets/css/bootstrap.min.css' %}">
+    {% block style %}
+    <style>
+        *{font-family: 'Courier New';}
+    </style>
+    {% endblock %}
+    {% block script %}
+    {% endblock %}
+</head>
+<body>
+    {% include "partials/_navbar.html" %}
+    {% include "partials/_messages.html" %}
+    
+    <div class="container mt-4">
+        {% block content %}
+        {% endblock %}
+    </div>
+    
+
+    <script src="{% static 'assets/js/bootstrap.bundle.min.js' %}"></script>
+    <!-- Button trigger modal -->
+    
+    {% include "partials/_footer.html" %}
+    {% include "partials/_register.html" %}
+    {% include "partials/_login.html" %}
+  
+</body>
+</html>
