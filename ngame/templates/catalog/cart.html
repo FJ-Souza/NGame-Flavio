@@ -1,0 +1,104 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="row">
+    {% if items %}
+        {% for item in items %}
+            <div class="col-md-4">
+                <div class="card mb-4">
+                    <img class="card-img-top" src="{{ item.game.path.url }}" alt="{{ item.game.title }}">
+                    <div class="card-body">
+                        <h5 class="card-title">{{ item.game.title }}</h5>
+                        <p class="card-text"><strong>R${{ item.game.price }}</strong></p>
+                       <button class="increase_quantity" data-id="{{item.id}}">+</button>
+                          <span class="quantity" data-id="{{item.id}}">{{ item.quantity }}</span>
+                       <button class="decrease_quantity" data-id="{{item.id}}">-</button>
+                       <button class="remove_item btn" data-id="{{item.id}}"> <!-- botão deletar-->
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="red" class="bi bi-trash3-fill" viewBox="0 0 16 16">
+                            <path d="M11 1.5v1h3.5a.5.5 0 0 1 0 1h-.538l-.853 10.66A2 2 0 0 1 11.115 16h-6.23a2 2 0 0 1-1.994-1.84L2.038 3.5H1.5a.5.5 0 0 1 0-1H5v-1A1.5 1.5 0 0 1 6.5 0h3A1.5 1.5 0 0 1 11 1.5m-5 0v1h4v-1a.5.5 0 0 0-.5-.5h-3a.5.5 0 0 0-.5.5M4.5 5.029l.5 8.5a.5.5 0 1 0 .998-.06l-.5-8.5a.5.5 0 1 0-.998.06m6.53-.528a.5.5 0 0 0-.528.47l-.5 8.5a.5.5 0 0 0 .998.058l.5-8.5a.5.5 0 0 0-.47-.528M8 4.5a.5.5 0 0 0-.5.5v8.5a.5.5 0 0 0 1 0V5a.5.5 0 0 0-.5-.5"/>
+                        </svg>
+                       </button>
+                    </div>
+                </div>
+            </div>
+            <div>
+                <p><strong>Valor Total: {{item.game.price}} * {{item.quantity}}</strong></p>
+            </div>
+        {% endfor %}
+    {% endif %}
+    <a href="{% url 'checkout' %}" class="btn btn-success">Finalizar Compra</a>
+</div>
+{% endblock %}
+{% block script %}
+<script>
+    document.addEventListener('DOMContentLoaded', function(){
+        const csrftoken = '{{ csrf_token }}';
+
+        const increaseButtons = document.querySelectorAll('.increase_quantity');
+        increaseButtons.forEach(function(button){
+            button.addEventListener('click', function(){
+                const id = this.dataset.id;
+                fetch('/update_cart/'+ id +'/', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/x-www-form-urlencoded',
+                        'X-CSRFToken': csrftoken,
+                    },
+                    body: new URLSearchParams({
+                        'action': 'increase'
+                    })
+                })
+                .then((response) => {
+                    return response.json();
+                }).then((data) => {
+                    const quantityElement = document.querySelector(`.quantity[data-id="${id}"]`);
+                    quantityElement.innerHTML = data.quantity;
+                });
+            });
+        });
+
+        const decreaseButtons = document.querySelectorAll('.decrease_quantity');
+        decreaseButtons.forEach(function(button){
+            button.addEventListener('click', function(){
+                const id = this.dataset.id;
+                fetch('/update_cart/'+ id +'/', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/x-www-form-urlencoded',
+                        'X-CSRFToken': csrftoken
+                    },
+                    body: new URLSearchParams({
+                        'action': 'decrease'
+                    })
+                })
+                .then((response) => {
+                    return response.json();
+                }).then((data) => {
+                    const quantityElement = document.querySelector(`.quantity[data-id="${id}"]`);
+                    quantityElement.innerHTML = data.quantity;
+                })
+                .catch((error) => {
+                    console.error('Error:', error);
+                });
+            });
+        });
+
+        const removeButtons = document.querySelectorAll('.remove_item');
+        removeButtons.forEach(function(button){
+            button.addEventListener('click',function(){
+                const id = this.dataset.id;
+                fetch('/remove_from_cart/'+ id +'/', {
+                    method: 'GET',
+                    
+                }).then((response) => {
+                    return response.json();
+                }).then((data) => {
+                    location.reload();
+                }).catch((error) => {
+                    console.error('Error:', error);
+                });
+            })
+        })
+    })
+</script>
+{% endblock %}

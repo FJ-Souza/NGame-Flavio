@@ -3,86 +3,121 @@ from .models import *
 from .forms import *
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
+from django.http import JsonResponse
 
 @login_required
 def home(request):
     games = Game.objects.all()
-    return render(request, 'catalog/home.html', {'games': games})
-
-# def index(request):
-#     games = Game.objects.all()
-#     return render(request, 'catalog/index.html', {'games': games})
+    cart = Cart.objects.filter(user=request.user).first() if request.user.is_authenticated else None
+    cart_count = CartItem.objects.filter(cart=cart).count() if request.user.is_authenticated else 0
+    return render(request, 'catalog/home.html', {'games': games, "cart_count": cart_count})
 
 def index(request):
-    user = request.user    
-    gaming = Game.objects.all()
-    data_game = []
-    for games in gaming:
-        data_game.append(    
+    user = request.user
+    games = Game.objects.all()
+    data_games = []
+    cart = Cart.objects.filter(user=request.user).first() if request.user.is_authenticated else None
+    cart_count = CartItem.objects.filter(cart=cart).count() if request.user.is_authenticated else 0
+    for game in games:
+        data_games.append(
             {
-            'games': games,
-            'liked': games.user_liked(user) if user.is_authenticated else False,
-            'comments': Comment.objects.filter(game=games)
+                'game': game,
+                "liked": game.user_liked(user) if user.is_authenticated else False,
+                "commented": game.user_commented(user) if user.is_authenticated else False,
+                "comments": Comment.objects.filter(game=game)
             }
         )
-    return render(request, 'catalog/index.html', {'games': data_game})
-
+    return render(request, 'catalog/index.html', {'games': data_games,"cart_count": cart_count})
 
 @login_required
-def like_gaming(request, gaming_id):
-    gaming = get_object_or_404(Game, id=gaming_id)
-    like, created = Like.objects.get_or_create(user=request.user, game=gaming)
+def like_game(request, game_id):
+    game = get_object_or_404(Game, id=game_id)
+    like, created = Like.objects.get_or_create(user=request.user, game=game)
     if not created:
         like.delete()
     return redirect('index')
 
 @login_required
-def comment_gaming(request, gaming_id):
-    gaming = get_object_or_404(Game, id=gaming_id)
+def comment_game(request, game_id):
+    game = get_object_or_404(Game, id=game_id)
     if request.method == 'POST':
         content = request.POST.get('content')
-        Comment.objects.create(user=request.user, game=gaming, content=content)
+        Comment.objects.create(user=request.user, game=game, content=content)
     return redirect('index')
 
-# @login_required
-# def detail_gaming(request, gaming_id):
-#     gaming = get_object_or_404(Game, id=gaming_id)
-#     comments = Comment.objects.filter(gaminging=gaming)
-#     liked = False
-#     if request.user.is_authenticated:
-#         liked = Like.objects.filter(user=request.user, gaming=gaming).exists()
-#     return render(request, 'catalog/detail_gaming.html', {'gaming': gaming, 'comments': comments, 'liked': liked})
 
 @login_required
-def add_gaming(request):
+def add_game(request):
     if request.method == 'POST':
         form = GameForm(request.POST, request.FILES)
         if form.is_valid():
             form.save()
-            messages.success(request, 'Jogo cadastrada com sucesso!')
+            messages.success(request, 'Jogo cadastrado com sucesso!')
             return redirect('home')
     else:
         form = GameForm()
-    return render(request, 'catalog/add_gaming.html', {'form': form})
+    return render(request, 'catalog/add_game.html', {'form': form})
 
 @login_required
-def edit_gaming(request, gaming_id):
-    gaming = get_object_or_404(Game, id=gaming_id)
+def edit_game(request, game_id):
+    game = get_object_or_404(Game, id=game_id)
     if request.method == 'POST':
-        form = GameForm(request.POST, request.FILES, instance=gaming)
+        form = GameForm(request.POST, request.FILES, instance=game)
         if form.is_valid():
             form.save()
-            messages.success(request, 'Jogo editada com sucesso!')
+            messages.success(request, 'Jogo editado com sucesso!')
             return redirect('home')
     else:
-        form = GameForm(instance=gaming)
-    return render(request, 'catalog/edit_gaming.html', {'form': form})
+        form = GameForm(instance=game)
+    return render(request, 'catalog/edit_game.html', {'form': form})
 
 @login_required
-def delete_gaming(request, gaming_id):
-    gaming = get_object_or_404(Game, id=gaming_id)
+def delete_game(request, game_id):
+    game = get_object_or_404(Game, id=game_id)
     if request.method == 'POST':
-        gaming.delete()
-        messages.success(request, 'Jogo deletada com sucesso!')
+        game.delete()
+        messages.success(request, 'Jogo deletado com sucesso!')
         return redirect('home')
-    return render(request, 'catalog/delete_gaming.html', {'gaming': gaming})
+    return render(request, 'catalog/delete_game.html', {'game': game})
+
+
+def add_to_cart(request, game_id):
+    game = get_object_or_404(Game, id=game_id)
+    cart, created = Cart.objects.get_or_create(user=request.user)
+    cart_item, created = CartItem.objects.get_or_create(cart=cart, game=game, quantity=1)
+    if not created:
+        cart_item.quantity += 1
+        cart_item.save()
+    return JsonResponse({'success': 'true', 'quantity': cart_item.quantity})
+
+def remove_from_cart(request, item_id):
+    cart_item = get_object_or_404(CartItem, id=item_id)
+    cart_item.delete()
+    return JsonResponse({'success': 'true'})
+
+def view_cart(request):
+    cart, created = Cart.objects.get_or_create(user=request.user)
+    intems = CartItem.objects.filter(cart=cart)
+    return render(request, 'catalog/cart.html', {'cart': cart, 'items': intems})
+
+def update_cart_item(request, item_id):
+    cart_item = get_object_or_404(CartItem, id=item_id)
+
+    if request.method == 'POST':
+        action = request.POST.get('action')
+        if action == 'increase':
+            cart_item.quantity += 1
+        elif action == 'decrease' and cart_item.quantity > 1:
+            cart_item.quantity -= 1
+        cart_item.save()
+        return JsonResponse({'success': 'true', 'quantity': cart_item.quantity})
+
+
+def checkout(request):
+    cart, created = Cart.objects.get_or_create(user=request.user)
+    if request.method == 'POST':
+        cart.delete()
+        # termina de fazer o metodo comprar aqui
+        messages.success(request, 'Compra realizada com sucesso!')
+        return redirect('index')
+    return render(request, 'catalog/checkout.html', {'cart': cart})

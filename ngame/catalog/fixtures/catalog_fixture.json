@@ -1,0 +1,146 @@
+[
+    {
+        "model": "catalog.game",
+        "pk": 1,
+        "fields": {
+            "title": "Game One",
+            "path": "img/2022/01/01/img4.jpg",
+            "description": "Description for Game One",
+            "price": "29.99",
+            "amount": 10
+        }
+    },
+    {
+        "model": "catalog.game",
+        "pk": 2,
+        "fields": {
+            "title": "Game Two",
+            "path": "img/2022/01/01/img3.jpg",
+            "description": "Description for Game Two",
+            "price": "39.99",
+            "amount": 15
+        }
+    },
+    {
+        "model": "catalog.game",
+        "pk": 3,
+        "fields": {
+            "title": "Game Three",
+            "path": "img/2022/01/01/img2.jpg",
+            "description": "Description for Game Three",
+            "price": "49.99",
+            "amount": 20
+        }
+    },
+    {
+        "model": "catalog.game",
+        "pk": 4,
+        "fields": {
+            "title": "Game Four",
+            "path": "img/2022/01/01/img1.jpg",
+            "description": "Description for Game Four",
+            "price": "59.99",
+            "amount": 25
+        }
+    },
+    {
+        "model": "catalog.game",
+        "pk": 5,
+        "fields": {
+            "title": "Game Five",
+            "path": "img/2022/01/01/img6.jpg",
+            "description": "Description for Game Five",
+            "price": "69.99",
+            "amount": 30
+        }
+    },
+    {
+        "model": "catalog.game",
+        "pk": 6,
+        "fields": {
+            "title": "Game Six",
+            "path": "img/2022/01/01/img5.jpg",
+            "description": "Description for Game Six",
+            "price": "79.99",
+            "amount": 35
+        }
+    },
+    {
+        "model": "catalog.game",
+        "pk": 7,
+        "fields": {
+            "title": "Game Seven",
+            "path": "img/2022/01/01/img4.jpg",
+            "description": "Description for Game Seven",
+            "price": "89.99",
+            "amount": 40
+        }
+    },
+    {
+        "model": "catalog.game",
+        "pk": 8,
+        "fields": {
+            "title": "Game Eight",
+            "path": "img/2022/01/01/img1.jpg",
+            "description": "Description for Game Eight",
+            "price": "99.99",
+            "amount": 45
+        }
+    },
+    {
+        "model": "catalog.game",
+        "pk": 9,
+        "fields": {
+            "title": "Game Nine",
+            "path": "img/2022/01/01/img2.jpg",
+            "description": "Description for Game Nine",
+            "price": "109.99",
+            "amount": 50
+        }
+    },
+    {
+        "model": "catalog.game",
+        "pk": 10,
+        "fields": {
+            "title": "Game Ten",
+            "path": "img/2022/01/01/img3.jpg",
+            "description": "Description for Game Ten",
+            "price": "119.99",
+            "amount": 55
+        }
+    },
+    {
+        "model": "catalog.like",
+        "pk": 1,
+        "fields": {
+            "user": 1,
+            "game": 1
+        }
+    },
+    {
+        "model": "catalog.like",
+        "pk": 2,
+        "fields": {
+            "user": 2,
+            "game": 2
+        }
+    },
+    {
+        "model": "catalog.comment",
+        "pk": 1,
+        "fields": {
+            "user": 1,
+            "game": 1,
+            "content": "Great game!"
+        }
+    },
+    {
+        "model": "catalog.comment",
+        "pk": 2,
+        "fields": {
+            "user": 2,
+            "game": 2,
+            "content": "Really enjoyed it!"
+        }
+    }
+]
