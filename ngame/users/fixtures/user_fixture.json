@@ -4,26 +4,12 @@
         "pk": 1,
         "fields": {
             "username": "flavio",
-            "password": "142536Fla@",
+            "password": "pbkdf2_sha256$720000$xkByjBDRmE7cG2n4e5lHQK$OqWxrkVs9BaH9V92ILEl9mSG35Lfr4KW+ZdwGGcMDC0=",
             "email": "junior123@gmail.com",
             "is_staff": false,
             "is_active": true,
             "is_superuser": false,
             "first_name": "Flavio",
-            "last_name": "Doe"
-        }
-    },
-    {
-        "model": "users.user",
-        "pk": 2,
-        "fields": {
-            "username": "rafael",
-            "password": "147258Raf@",
-            "email": "rafa1212@gmail.com",
-            "is_staff": false,
-            "is_active": true,
-            "is_superuser": false,
-            "first_name": "Rafael",
             "last_name": "Doe"
         }
     }
