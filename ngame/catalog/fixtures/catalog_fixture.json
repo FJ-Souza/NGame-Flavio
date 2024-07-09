@@ -118,11 +118,45 @@
         }
     },
     {
+        "model": "catalog.like",
+        "pk": 2,
+        "fields": {
+            "user": 1,
+            "game": 3
+        }
+    },
+    {
+        "model": "catalog.like",
+        "pk": 3,
+        "fields": {
+            "user": 1,
+            "game": 4
+        }
+    },
+    {
         "model": "catalog.comment",
         "pk": 1,
         "fields": {
             "user": 1,
             "game": 1,
+            "content": "Great game!"
+        }
+    },
+    {
+        "model": "catalog.comment",
+        "pk": 2,
+        "fields": {
+            "user": 1,
+            "game": 4,
+            "content": "Great game!"
+        }
+    },
+    {
+        "model": "catalog.comment",
+        "pk": 3,
+        "fields": {
+            "user": 1,
+            "game": 3,
             "content": "Great game!"
         }
     }
