@@ -49,6 +49,9 @@ class CartItem(models.Model):
     game = models.ForeignKey(Game, on_delete=models.CASCADE)
     quantity = models.IntegerField()
 
+    def price_total(self):
+        return self.quantity * self.game.price 
+    
     def __str__(self):
         return f'{self.game} no {self.cart}'
     

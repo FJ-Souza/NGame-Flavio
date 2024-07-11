@@ -27,8 +27,8 @@
             </li>
             {% endfor %}
             <li class="list-group-item d-flex justify-content-center align-items-center">
-                <div class="d-flex py-3" style="font-size: 20px;">
-                   Valor total: R$<span id="total">{{total_price}}</span>
+                <div class="d-flex py-3" style="font-size: 20px;" id="total">
+                   Valor total: R${{total_price}}
                 </div>
             </li>
         </ul>
@@ -67,7 +67,8 @@
                     const price = parseFloat(button.dataset.price);
                     const priceElement = document.querySelector(`.price[data-id="${id}"]`);
                     priceElement.innerHTML = "R$" + (price * data.quantity).toFixed(2);                     
-
+                    const tElement = document.querySelector(`#total`); 
+                    tElement.innerHTML = "R$" + data.total_price;
                 });
             });
         });
