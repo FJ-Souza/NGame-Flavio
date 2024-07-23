@@ -1,0 +1,71 @@
+{% load static %}
+{% for game in games %}
+
+<div class="modal fade" id="card{{game.games.id}}" data-bs-backdrop="static" tabindex="-1" aria-labelledby="card{{game.games.id}}" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+            <h1 class="modal-title fs-5" id="card{{game.games.id}}">{{game.games.title}}</h1>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body d-flex justify-content-center" >
+                <img src="{{ game.games.path.url }}" width="40%" height="50%" alt="{{ game.games.title }}">
+            </div>
+            <hr>
+            <div class="modal-body d-flex justify-content-center" >
+                <details>
+                    {{ game.games.description }}
+                </details>
+            </div>
+            <hr>
+            <div class="modal-body d-flex" style="justify-content: space-around">
+                <div>
+                    <h6 class="text-success">Preço: {{game.games.price}}</h4>                    
+                </div>
+                <div>
+                    <h6>Quantidade: {{game.games.stocked}}</h4>                    
+                </div>
+            </div>
+            <div class="modal-footer justify-content-center" style="flex-direction: column">
+                {% if user.is_authenticated %}
+                <a href="{% url 'like_game' game.games.id %}" id="likeButton" class="like-button {% if liked %}liked{% endif %}" style="text-decoration: none; color: #000;">
+                    <i class="fa {% if liked %}fa-heart{% else %}fa-heart-o{% endif %}" aria-hidden="true"></i>
+                    <div id="btlike" onclick="liked()">    
+                        {% if game.liked %}
+                            <svg id="like" xmlns="http://www.w3.org/2000/svg" width="30px" height="30px" fill="red" stroke="#000" class="bi bi-heart-fill" viewBox="-1 -1 18 16" >
+                                <path fill-rule="evenodd" d="M8 1.314C12.438-3.248 23.534 4.735 8 15-7.534 4.736 3.562-3.248 8 1.314"/>
+                            </svg>
+                            {{ game.games.total_likes }}
+                        {% else %}
+                            <svg id="like" xmlns="http://www.w3.org/2000/svg" width="30px" height="30px" fill="#fff" stroke="#000" class="bi bi-heart-fill" viewBox="-1 -1 18 16" >
+                                <path fill-rule="evenodd" d="M8 1.314C12.438-3.248 23.534 4.735 8 15-7.534 4.736 3.562-3.248 8 1.314"/>
+                            </svg>
+                            {{ game.games.total_likes }}
+                        {% endif %}
+                    </div>
+                
+                </a>
+                <form method="post" class="d-flex justify-content-center" style="flex-direction: column;" action="{% url 'comment_game' game.games.id %}">
+                    {% csrf_token %}
+                    <div class="form-group py-2">
+                        <textarea class="form-control" name="content" rows="3" placeholder="Adicionar comentário"></textarea>
+                    </div>
+                    <button type="submit" class="btn btn-secondary">Comentar</button>
+                </form>
+                <h5 class="mt-4">Comentários:</h5>
+                {% for comment in game.comments %}
+                    <div class="card mt-2 ">
+                        <div class="card-body ">
+                            <p class="card-text">{{ comment.content }}</p>
+                            <p class="card-text"><small class="text-muted">por {{ comment.user.username }}</small></p>
+                        </div>
+                    </div>
+                {% endfor %}
+                {% else %}
+                    Login para comentar
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+{% endfor %}
