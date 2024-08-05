@@ -131,3 +131,19 @@ def checkout(request):
         messages.success(request, 'Compra realizada com sucesso!')
         return redirect('index')
     return render(request, 'catalog/checkout.html', {'cart': cart, 'total_price': total_price})
+
+
+@login_required
+def address(request, id_user):
+    user = User.objects.get(id=id_user)
+    if request.method == 'POST':
+        form = AddressForm(request.POST)
+        if form.is_valid():
+            address = form.save(commit=False)
+            address.user_id = id_user
+            address.save()
+            messages.success(request, 'Endereço cadastrado com sucesso!')
+            return redirect('view_cart')
+    else:
+        form = AddressForm()
+    return render(request, 'site/address.html', {'form': form})

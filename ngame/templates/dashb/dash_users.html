@@ -115,36 +115,6 @@
       </symbol>
     </svg>
 
-    <div class="dropdown position-fixed bottom-0 end-0 mb-3 me-3 bd-mode-toggle">
-      <button class="btn btn-bd-primary py-2 dropdown-toggle d-flex align-items-center" id="bd-theme" type="button" aria-expanded="false" data-bs-toggle="dropdown" aria-label="Toggle theme (dark)">
-        <svg class="bi my-1 theme-icon-active" width="1em" height="1em"><use href="#moon-stars-fill"></use></svg>
-        <span class="visually-hidden" id="bd-theme-text">Toggle theme</span>
-      </button>
-      <ul class="dropdown-menu dropdown-menu-end shadow" aria-labelledby="bd-theme-text">
-        <li>
-          <button type="button" class="dropdown-item d-flex align-items-center" data-bs-theme-value="light" aria-pressed="false">
-            <svg class="bi me-2 opacity-50" width="1em" height="1em"><use href="#sun-fill"></use></svg>
-            Light
-            <svg class="bi ms-auto d-none" width="1em" height="1em"><use href="#check2"></use></svg>
-          </button>
-        </li>
-        <li>
-          <button type="button" class="dropdown-item d-flex align-items-center active" data-bs-theme-value="dark" aria-pressed="true">
-            <svg class="bi me-2 opacity-50" width="1em" height="1em"><use href="#moon-stars-fill"></use></svg>
-            Dark
-            <svg class="bi ms-auto d-none" width="1em" height="1em"><use href="#check2"></use></svg>
-          </button>
-        </li>
-        <li>
-          <button type="button" class="dropdown-item d-flex align-items-center" data-bs-theme-value="auto" aria-pressed="false">
-            <svg class="bi me-2 opacity-50" width="1em" height="1em"><use href="#circle-half"></use></svg>
-            Auto
-            <svg class="bi ms-auto d-none" width="1em" height="1em"><use href="#check2"></use></svg>
-          </button>
-        </li>
-      </ul>
-    </div>
-
     
 <svg xmlns="http://www.w3.org/2000/svg" class="d-none">
   <symbol id="calendar3" viewBox="0 0 16 16">
@@ -197,7 +167,7 @@
 </svg>
 
 <header class="navbar sticky-top bg-dark flex-md-nowrap p-0 shadow" data-bs-theme="dark">
-  <a class="navbar-brand col-md-3 col-lg-2 me-0 px-3 fs-6 text-white" href="https://getbootstrap.com/docs/5.3/examples/dashboard/#">N Game</a>
+  <a class="navbar-brand col-md-3 col-lg-2 me-0 px-3 fs-6 text-white" href="{% url 'index' %}">N Game</a>
 
   <ul class="navbar-nav flex-row d-md-none">
     <li class="nav-item text-nowrap">
@@ -219,7 +189,7 @@
 
 <div class="container-fluid">
   <div class="row">
-    <div class="sidebar border border-right col-md-3 col-lg-2 p-0 bg-body-tertiary">
+    <div class="sidebar border border-right col-md-3 col-lg-2 p-0 bg-body-tertiary" style="height: 100vh;">
       <div class="offcanvas-md offcanvas-end bg-body-tertiary" tabindex="-1" id="sidebarMenu" aria-labelledby="sidebarMenuLabel">
         <div class="offcanvas-header">
           <h5 class="offcanvas-title" id="sidebarMenuLabel">N Game</h5>
@@ -233,12 +203,14 @@
                 Dashboard
               </a>
             </li>
+            {% if request.user.is_superuser %}
             <li class="nav-item">
               <a class="nav-link d-flex align-items-center gap-2" href="{% url 'dash_users' %}">
-                <svg class="bi"><use xlink:href="#file-earmark"></use></svg>
+                <svg class="bi"><use xlink:href="#people"></use></svg>
                 Users
               </a>
             </li>
+            {% endif %}
             <li class="nav-item">
               <a class="nav-link d-flex align-items-center gap-2" href="{% url 'dash_products' %}">
                 <svg class="bi"><use xlink:href="#cart"></use></svg>
@@ -246,58 +218,44 @@
               </a>
             </li>
             <li class="nav-item">
-              <a class="nav-link d-flex align-items-center gap-2" href="#">
-                <svg class="bi"><use xlink:href="#people"></use></svg>
-                Customers
-              </a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link d-flex align-items-center gap-2" href="#">
+              <a class="nav-link d-flex align-items-center gap-2" href="{% url 'dash_buy' %}">
                 <svg class="bi"><use xlink:href="#graph-up"></use></svg>
-                Reports
+                Pagamentos
               </a>
             </li>
             <li class="nav-item">
-              <a class="nav-link d-flex align-items-center gap-2" href="#">
+              <a class="nav-link d-flex align-items-center gap-2" href="{% url 'dash_address' %}">
                 <svg class="bi"><use xlink:href="#puzzle"></use></svg>
-                Integrations
+                Endereços
               </a>
             </li>
           </ul>
-
           <h6 class="sidebar-heading d-flex justify-content-between align-items-center px-3 mt-4 mb-1 text-body-secondary text-uppercase">
-            <span>Saved reports</span>
+            <span>Salvar Arquivos</span>
             <a class="link-secondary" href="#" aria-label="Add a new report">
               <svg class="bi"><use xlink:href="#plus-circle"></use></svg>
             </a>
           </h6>
           <ul class="nav flex-column mb-auto">
             <li class="nav-item">
-              <a class="nav-link d-flex align-items-center gap-2" href="#">
+              <button id="criar-arquivo"  class="nav-link d-flex align-items-center gap-2" >
                 <svg class="bi"><use xlink:href="#file-earmark-text"></use></svg>
-                Current month
-              </a>
+                Dados do Site
+              </button>
             </li>
             <li class="nav-item">
-              <a class="nav-link d-flex align-items-center gap-2" href="#">
+              <button id="criar-arquivo2"  class="nav-link d-flex align-items-center gap-2" >
                 <svg class="bi"><use xlink:href="#file-earmark-text"></use></svg>
-                Last quarter
-              </a>
+                Dados dos Usuarios
+              </button>
             </li>
             <li class="nav-item">
-              <a class="nav-link d-flex align-items-center gap-2" href="#">
+              <button id="criar-arquivo3"  class="nav-link d-flex align-items-center gap-2" >
                 <svg class="bi"><use xlink:href="#file-earmark-text"></use></svg>
-                Social engagement
-              </a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link d-flex align-items-center gap-2" href="#">
-                <svg class="bi"><use xlink:href="#file-earmark-text"></use></svg>
-                Year-end sale
-              </a>
+                Pagamentos
+              </button>
             </li>
           </ul>
-
           <hr class="my-3">
 
           <ul class="nav flex-column mb-auto">
@@ -351,10 +309,59 @@
     </main>
   </div>
 </div>
-    
+<script>
+  document.getElementById('criar-arquivo').addEventListener('click', function() {
+      var nomeArquivo = 'Ngame_geral_' + new Date().toISOString().slice(0, 10);
+      
+      var conteudo = 'dados dos usuarios do site Ngame\n ';
+
+      var blob = new Blob([conteudo], { type: 'text/plain' });
+      var url = URL.createObjectURL(blob);
+
+      var a = document.createElement('a');
+      a.href = url;
+      a.download = nomeArquivo + '.txt';
+      document.body.appendChild(a);
+      a.click();
+      window.URL.revokeObjectURL(url);
+  });
+</script>
+<script>
+  document.getElementById('criar-arquivo2').addEventListener('click', function() {
+      var nomeArquivo = 'Ngame_usuarios_' + new Date().toISOString().slice(0, 10);
+      var conteudo = 'dados dos usuarios do site Ngame\n ';
+
+      var blob = new Blob([conteudo], { type: 'text/plain' });
+      var url = URL.createObjectURL(blob);
+
+      var a = document.createElement('a');
+      a.href = url;
+      a.download = nomeArquivo + '.txt';
+      document.body.appendChild(a);
+      a.click();
+      window.URL.revokeObjectURL(url);
+  });
+</script>
+<script>
+  document.getElementById('criar-arquivo3').addEventListener('click', function() {
+      var nomeArquivo = 'Ngame_pagamentos_' + new Date().toISOString().slice(0, 10);
+      var conteudo = 'dados dos pagamentos do site Ngame\n';
+
+      var blob = new Blob([conteudo], { type: 'text/plain' });
+      var url = URL.createObjectURL(blob);
+
+      var a = document.createElement('a');
+      a.href = url;
+      a.download = nomeArquivo + '.txt';
+      document.body.appendChild(a);
+      a.click();
+      window.URL.revokeObjectURL(url);
+  });
+</script>
     <script src="{% static 'assets/js/bootstrap.bundle.min.js' %}" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>  
     <script src="{% static 'assets/js/chart.umd.js' %}" integrity="sha384-eI7PSr3L1XLISH8JdDII5YN/njoSsxfbrkCTnJrzXt+ENP5MOVBxD+l6sEG4zoLp" crossorigin="anonymous"></script>
     <script src="{% static 'assets/js/dashboard.js' %}"></script>
+    {% include "partials/_register_dash.html" %}
 
 </body>
 </html>
