@@ -233,7 +233,7 @@
                 Dashboard
               </a>
             </li>
-            {% if request.user.is_superuser %}
+            {% if request.user.user_type %}
             <li class="nav-item">
               <a class="nav-link d-flex align-items-center gap-2" href="{% url 'dash_users' %}">
                 <svg class="bi"><use xlink:href="#people"></use></svg>

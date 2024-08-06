@@ -4,6 +4,7 @@ from .forms import *
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from django.http import JsonResponse
+from users.forms import *
 
 @login_required
 def home(request):
@@ -18,6 +19,8 @@ def index(request):
     data_games = []
     cart = Cart.objects.filter(user=request.user).first() if request.user.is_authenticated else None
     cart_count = CartItem.objects.filter(cart=cart).count() if request.user.is_authenticated else 0
+    form = LoginForm
+    vorm = UserRegistrationForm
     for game in games:
         data_games.append(
             {
@@ -27,7 +30,7 @@ def index(request):
                 "comments": Comment.objects.filter(game=game)
             }
         )
-    return render(request, 'catalog/index.html', {'games': data_games,"cart_count": cart_count})
+    return render(request, 'catalog/index.html', {'games': data_games,"cart_count": cart_count, 'form': form,'vorm':vorm})
 
 @login_required
 def like_game(request, game_id):

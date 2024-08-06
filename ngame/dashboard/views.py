@@ -15,7 +15,7 @@ def dash(request):
     
 @login_required
 def dash_users(request):
-    if request.user.is_superuser:
+    if request.user.user_type == 'admin':
         users = User.objects.all()
         return render(request, 'dashb/dash_users.html', {'users': users})
     else:

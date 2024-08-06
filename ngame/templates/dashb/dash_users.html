@@ -99,6 +99,7 @@
         <link href="{% static 'assets/css/dashboard.css' %}" rel="stylesheet">
     </head>
   <body>
+
     <svg xmlns="http://www.w3.org/2000/svg" class="d-none">
       <symbol id="check2" viewBox="0 0 16 16">
         <path d="M13.854 3.646a.5.5 0 0 1 0 .708l-7 7a.5.5 0 0 1-.708 0l-3.5-3.5a.5.5 0 1 1 .708-.708L6.5 10.293l6.646-6.647a.5.5 0 0 1 .708 0z"></path>
@@ -200,10 +201,11 @@
             <li class="nav-item">
               <a class="nav-link d-flex align-items-center gap-2 active" aria-current="page" href="{% url 'dash' %}">
                 <svg class="bi"><use xlink:href="#house-fill"></use></svg>
-                Dashboard
+                <h1>Dashboard Admin</h1>
+                <p>Essa é minha dashboard Admin, eu me chamo {{user.username}}.</p>
               </a>
             </li>
-            {% if request.user.is_superuser %}
+            {% if request.user.user_type %}
             <li class="nav-item">
               <a class="nav-link d-flex align-items-center gap-2" href="{% url 'dash_users' %}">
                 <svg class="bi"><use xlink:href="#people"></use></svg>
